@@ -20,20 +20,37 @@ void printList(Node* head) {
     }
     printf("NULL\n");
 }
-Node *findMiddle(Node *head) {
-    Node* oneStep = head;
-    Node* twoStep = head;
-    while (twoStep != NULL && twoStep->next != NULL) {
-        oneStep = oneStep->next;
-        twoStep = twoStep->next->next;
+Node* sortList(Node* head) {
+    if (head == NULL) {
+        return NULL;
     }
-    return oneStep;
+    int swapped;
+    Node* currentNode;
+    Node* lastNode = NULL;
+
+    do {
+        swapped = 0;
+        currentNode = head;
+
+        while (currentNode->next != lastNode) {
+            if (currentNode->data > currentNode->next->data) {
+                int temp = currentNode->data;
+                currentNode->data = currentNode->next->data;
+                currentNode->next->data = temp;
+                swapped = 1;
+            }
+            currentNode = currentNode->next;
+        }
+        lastNode = currentNode;
+    } while (swapped);
+
+    return head;
 }
 int main() {
-    Node* head = createNode(10);
+    Node* head = createNode(40);
     Node* node2 = createNode(20);
-    Node* node3 = createNode(30);
-    Node* node4 = createNode(40);
+    Node* node3 = createNode(10);
+    Node* node4 = createNode(80);
     Node* node5 = createNode(50);
     head->next = node2;
     node2->prev = head;
@@ -45,9 +62,8 @@ int main() {
     node5->prev = node4;
     printf("Mang ban dau:\n");
     printList(head);
-    Node* middleNode = findMiddle(head);
-    if (middleNode != NULL) {
-        printf("Node giua la: %d\n", middleNode->data);
-    }
+    sortList(head);
+    printf("Mang sau khi da sap xep:\n");
+    printList(head);
     return 0;
 }
